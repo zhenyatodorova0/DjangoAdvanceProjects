@@ -30,7 +30,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 PROJECT_APPS = [
-    'accounts'
+    'accounts',
+    'common'
 ]
 
 INSTALLED_APPS = [
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+] + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -117,6 +118,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'accounts:login-cbv'
 
 
 # Static files (CSS, JavaScript, Images)

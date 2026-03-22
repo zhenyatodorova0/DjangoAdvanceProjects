@@ -1,0 +1,36 @@
+from django.conf import settings
+from django.db import migrations
+
+def create_permission(apps, schema_editor):
+    PermissionModel = apps.get_model('auth', 'Permission')
+    ContentTypeModel = apps.get_model('contenttypes', 'ContentType')
+
+    app_label, model_name = settings.AUTH_USER_MODEL.split('.')
+    content_type = ContentTypeModel.objects.get(
+        app_label=app_label,
+        model=model_name.lower(),
+    )
+    PermissionModel.objects.get_or_create(
+        content_type=content_type,
+        codename="can_set_unusable_password",
+        defaults={"name": "Can set unusable password"}
+    )
+
+def remove_permission(apps, schema_editor):
+    PermissionModel = apps.get_model('auth', 'Permission')
+
+    PermissionModel.objects.filter(
+        codename="can_set_unusable_password",
+    ).delete()
+
+class Migration(migrations.Migration):
+    initial = True
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.RunPython(
+            code=create_permission,
+            reverse_code=remove_permission
+        ),
+    ]
